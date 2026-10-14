@@ -1,9 +1,10 @@
 
-
 <h2>Project Task Manager</h2>
 
+<!-- @if: Displays content only when the condition is true -->
 <h3>Task Completion Status</h3>
 
+<!-- Interpolation: Displays taskName from the TypeScript component -->
 <p>Task Name: {{ taskName }}</p>
 
 @if (taskCompleted == true) {
@@ -19,6 +20,7 @@
 
 <h3>Conditional Display Using If-Else</h3>
 
+<!-- @else: Displays an alternative when the @if condition is false -->
 @if (taskCompleted) {
   <p>Project task is completed.</p>
 } @else {
@@ -38,6 +40,7 @@
   <p>Current Status: Pending</p>
 }
 
+<!-- Event binding: Click reverses the Boolean value of taskCompleted -->
 <button (click)="taskCompleted = !taskCompleted">
   Toggle Task Status
 </button>
@@ -55,15 +58,19 @@
   <p>Current Status: Pending</p>
 }
 
+<!-- Ternary expression selects the text; interpolation displays it -->
 <button (click)="taskCompleted = !taskCompleted">
   {{ taskCompleted ? 'Mark as Pending' : 'Mark as Completed' }}
 </button>
+
+<!-- Note: Both buttons above update the same taskCompleted variable -->
 
 
 <hr>
 
 <h3>Task Status Using Switch</h3>
 
+<!-- Two-way binding: Dropdown updates taskStatus in the component -->
 <label for="taskStatus">Select Task Status:</label>
 
 <select id="taskStatus" [(ngModel)]="taskStatus">
@@ -76,6 +83,7 @@
 
 <p>Current Task Status: {{ taskStatus }}</p>
 
+<!-- @switch: Displays the matching @case based on taskStatus -->
 @switch (taskStatus) {
   @case ('Not Started') {
     <p>The task has not started yet.</p>
@@ -96,6 +104,8 @@
 
 <h3>Display Project Tasks Using For Loop</h3>
 
+<!-- @for: Repeats HTML for each task in the tasks array -->
+<!-- $index begins at 0; track helps Angular identify list items -->
 <ul>
   @for (task of tasks; track $index; let i = $index) {
     <li>{{ task }} (Index: {{ i }})</li>
@@ -107,6 +117,7 @@
 
 <h3>Add New Project Tasks</h3>
 
+<!-- ngModel stores user input in the newTask TypeScript variable -->
 <label for="newTask">Enter a New Task:</label>
 
 <input
@@ -116,10 +127,13 @@
   placeholder="Enter task name"
 >
 
+<!-- Event binding: Calls addTask() to add the task to the array -->
 <button (click)="addTask()">Add Task</button>
 
 <h4>Project Task List</h4>
 
+<!-- @for automatically displays newly added tasks -->
+<!-- @empty displays a message when the array has no items -->
 <ul>
   @for (task of tasks; track $index; let i = $index) {
     <li>{{ i + 1 }}. {{ task }}</li>
@@ -128,6 +142,7 @@
   }
 </ul>
 
+<!-- Note: New tasks are stored in memory, not saved permanently -->
 
 
 <hr>
@@ -136,6 +151,8 @@
 
 <h4>Project Team Members</h4>
 
+<!-- JSON.parse() in TypeScript converts JSON text into an array -->
+<!-- @for loops through the objects; interpolation displays their properties -->
 <ul>
   @for (member of teamMembers; track $index; let i = $index) {
     <li>
@@ -151,19 +168,25 @@
 
 <p>Task: Prepare Project Documentation</p>
 
+<!-- ng-template defines content but does not display it automatically -->
+<!-- #reviewMessage is a local HTML template reference -->
 <ng-template #reviewMessage>
   <p>Project documentation is ready for review.</p>
 </ng-template>
 
+<!-- Clicking the button toggles the Boolean showReviewMessage -->
 <button (click)="showReviewMessage = !showReviewMessage">
   {{ showReviewMessage ? 'Hide Review Message' : 'Show Review Message' }}
 </button>
 
+<!-- @if controls when NgTemplateOutlet renders the template -->
+<!-- ng-container does not create an extra HTML wrapper element -->
 @if (showReviewMessage) {
   <ng-container
     [ngTemplateOutlet]="reviewMessage">
   </ng-container>
 }
+
 
 <hr>
 
@@ -171,6 +194,8 @@
 
 <p>Task: {{ taskName }}</p>
 
+<!-- This dropdown shares taskStatus with the earlier dropdown -->
+<!-- Changing either dropdown updates both and the other status examples -->
 <label for="taskAppearanceStatus">Select Task Status:</label>
 
 <select id="taskAppearanceStatus" [(ngModel)]="taskStatus">
@@ -181,6 +206,8 @@
 
 <h4>Example 1: NgClass</h4>
 
+<!-- NgClass applies CSS classes based on the current task status -->
+<!-- The class styles are defined in project-task-manager.css -->
 <p [ngClass]="{
   'status-completed': taskStatus === 'Completed',
   'status-progress': taskStatus === 'In Progress',
@@ -191,6 +218,8 @@
 
 <h4>Example 2: NgStyle</h4>
 
+<!-- NgStyle applies inline styles directly to the existing paragraph -->
+<!-- The ternary conditions select green, orange, or red -->
 <p [ngStyle]="{
   'font-weight': 'bold',
   'color': taskStatus === 'Completed' ? 'green' :
@@ -198,6 +227,8 @@
 }">
   Current Status: {{ taskStatus }}
 </p>
+
+<!-- Unlike @if, NgClass and NgStyle do not remove the paragraph from the DOM -->
 
 
 <hr>
@@ -208,6 +239,9 @@
 
 <p>Current Status: {{ taskStatus }}</p>
 
+<!-- appTaskStatusImage attaches our custom directive to this image -->
+<!-- [taskStatus] passes the component value to the directive's @Input() -->
+<!-- The directive uses ngOnChanges() and @HostBinding() to update img src -->
 <img
   appTaskStatusImage
   [taskStatus]="taskStatus"
