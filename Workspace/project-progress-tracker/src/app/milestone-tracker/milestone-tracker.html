@@ -1,0 +1,9 @@
+<h2>Milestone Tracker</h2>
+
+<label for="milestone-status">Milestone Status:</label>
+
+<input
+    id="milestone-status"
+    type="text"
+    [formControl]="milestoneStatus">
+<p>Current Status: {{ milestoneStatus.value }}</p>
